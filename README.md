@@ -1,21 +1,12 @@
 # JFrog Interview Homework
 
-Github Actions workflow files at:
-```bash
-.github/workflows/build.yml
-```
-
-Dockerfile located in root.
-
-XRay Scan Data export (JSON format) located in XRay_SCAN_DATA directory.
-
 ## How to run this project locally
 
-Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can build a jar file and run it from the command line (it should work just as well with Java 17 or newer):
+Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can pull the image from the yujisakai10.jfrog.io JFrog Artifactory and run it locally(it should work just as well with Java 17 or newer).
 
 ```bash
 docker pull yujisakai10.jfrog.io/petclinic-docker-local/spring-petclinic:latest
-docker run -p 8080:8080 my-petclinic-app
+docker run --name my-petclinic-app -p 8080:8080 -itd yujisakai10.jfrog.io/petclinic-docker-local/spring-petclinic
 ```
 
 You can check if the container is running with the following docker command.
@@ -24,6 +15,17 @@ docker ps
 ```
 
 Finally you can access the app at <http://localhost:8080/>.
+
+---
+
+Github Actions workflow files at:
+```bash
+.github/workflows/build.yml
+```
+
+Dockerfile located in root.
+
+XRay Scan Data export (JSON format) located in XRay_SCAN_DATA directory.
 
 <details>
 
