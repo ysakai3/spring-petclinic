@@ -1,3 +1,34 @@
+# JFrog Interview Homework
+
+Github Actions workflow files at:
+```bash
+.github/workflows/build.yml
+```
+
+Dockerfile located in root.
+
+XRay Scan Data export (JSON format) located in XRay_SCAN_DATA directory.
+
+## How to run this project locally
+
+Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can build a jar file and run it from the command line (it should work just as well with Java 17 or newer):
+
+```bash
+docker pull yujisakai10.jfrog.io/petclinic-docker-local/spring-petclinic:latest
+docker run -p 8080:8080 my-petclinic-app
+```
+
+You can check if the container is running with the following docker command.
+```bash
+docker ps
+```
+
+Finally you can access the app at <http://localhost:8080/>.
+
+<details>
+
+<summary> Original README </summary>
+
 # Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
@@ -163,3 +194,5 @@ For additional details, please refer to the blog post [Hello DCO, Goodbye CLA: S
 ## License
 
 The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+
+</details>
