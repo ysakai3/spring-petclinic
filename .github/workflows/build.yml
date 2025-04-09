@@ -19,7 +19,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean install
+
+      - name: Run tests
+        run: ./mvnw test
 
       - name: Log in to JFrog Docker registry
         run: echo "${{ secrets.JFROG_PASSWORD }}" | docker login ${{ secrets.JFROG_REGISTRY }} -u ${{ secrets.JFROG_USERNAME }} --password-stdin
