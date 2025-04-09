@@ -4,6 +4,13 @@
 
 Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can pull the image from the yujisakai10.jfrog.io JFrog Artifactory and run it locally(it should work just as well with Java 17 or newer).
 
+First you need to login to JFrog. Enter your Username and Identity Token to authenticate
+```bash
+docker login yujisakai10.jfrog.io
+```
+
+Once logged in, you can pull the image and run it.
+
 ```bash
 docker pull yujisakai10.jfrog.io/petclinic-docker-local/spring-petclinic:latest
 docker run --name my-petclinic-app -p 8080:8080 -itd yujisakai10.jfrog.io/petclinic-docker-local/spring-petclinic
