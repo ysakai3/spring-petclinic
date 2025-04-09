@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: ./mvnw clean install
+        run: ./mvnw clean install -X
 
       - name: Run tests
         run: ./mvnw test
