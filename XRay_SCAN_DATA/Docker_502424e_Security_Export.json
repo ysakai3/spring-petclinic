@@ -1,0 +1,402 @@
+{
+   "total_count": 4,
+   "data": [
+      {
+         "id": "XRAY-676707",
+         "severity": "Critical",
+         "jfrog_severity": "High",
+         "severity_source": "CVSS V3 from NVD",
+         "pkg_type": "maven",
+         "summary": "Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.\n\nIf all of the following were true, a malicious user was able to view       security sensitive files and/or inject content into those files:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads\n- attacker knowledge of the names of security sensitive files being uploaded\n- the security sensitive files also being uploaded via partial PUT\n\nIf all of the following were true, a malicious user was able to       perform remote code execution:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- application was using Tomcat's file based session persistence with the default storage location\n- application included a library that may be leveraged in a deserialization attack\n\nUsers are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue.",
+         "issue_type": "security",
+         "provider": "JFrog",
+         "component": "org.apache.tomcat.embed:tomcat-embed-core",
+         "source_id": "gav://org.apache.tomcat.embed:tomcat-embed-core",
+         "source_comp_id": "gav://org.apache.tomcat.embed:tomcat-embed-core:10.1.34",
+         "component_versions": {
+            "id": "org.apache.tomcat.embed:tomcat-embed-core",
+            "vulnerable_versions": [
+               "10.1.0-M1 ≤ Version < 10.1.35",
+               "11.0.0-M1 ≤ Version < 11.0.3",
+               "9.0.0.M1 ≤ Version < 9.0.99"
+            ],
+            "fixed_versions": [
+               "10.1.35",
+               "11.0.3",
+               "9.0.99"
+            ],
+            "more_details": {
+               "cves": [
+                  {
+                     "cve": "CVE-2025-24813",
+                     "cwe": [
+                        "CWE-502",
+                        "CWE-706",
+                        "CWE-44"
+                     ],
+                     "cwe_details": {
+                        "CWE-44": {
+                           "name": "Path Equivalence: 'file.name' (Internal Dot)",
+                           "description": "The product accepts path input in the form of internal dot ('file.ordir') without appropriate validation, which can lead to ambiguous path resolution and allow an attacker to traverse the file system to unintended locations or access arbitrary files."
+                        },
+                        "CWE-502": {
+                           "name": "Deserialization of Untrusted Data",
+                           "description": "The product deserializes untrusted data without sufficiently verifying that the resulting data will be valid.",
+                           "categories": [
+                              {
+                                 "category": "2023 CWE Top 25",
+                                 "rank": "15"
+                              }
+                           ]
+                        },
+                        "CWE-706": {
+                           "name": "Use of Incorrectly-Resolved Name or Reference",
+                           "description": "The product uses a name or reference to access a resource, but the name/reference resolves to a resource that is outside of the intended control sphere."
+                        }
+                     },
+                     "cvss_v3": "9.8/CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+                  }
+               ],
+               "description": "Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.2, from 10.1.0-M1 through 10.1.34, from 9.0.0.M1 through 9.0.98.\n\nIf all of the following were true, a malicious user was able to view security sensitive files and/or inject content into those files:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads\n- attacker knowledge of the names of security sensitive files being uploaded\n- the security sensitive files also being uploaded via partial PUT\n\nIf all of the following were true, a malicious user was able to perform remote code execution:\n- writes enabled for the default servlet (disabled by default)\n- support for partial PUT (enabled by default)\n- application was using Tomcat's file based session persistence with the default storage location\n- application included a library that may be leveraged in a deserialization attack\n\nUsers are recommended to upgrade to version 11.0.3, 10.1.35 or 9.0.99, which fixes the issue.",
+               "provider": "JFrog"
+            }
+         },
+         "edited": "0001-01-01T00:00:00Z",
+         "is_source_root": false,
+         "is_high_profile": true,
+         "high_profile_info": {
+            "id": 0,
+            "PublicVulnsTblID": 0,
+            "VulnId": "XRAY-676707",
+            "VulnerabilityTitle": "",
+            "ShortDescription": "A design problem in Apache Tomcat may lead to remote code execution when handling partial PUT requests.",
+            "FullDescription": "",
+            "Impact": 6,
+            "VulnerabilityType": "Remote code execution",
+            "Resolution": "##### Development mitigations\n\nThis vulnerability can be mitigated by enabling the `readonly` parameter of the default servlet (which is enabled by default). For example:\n\n```\n<servlet>\n    <servlet-name>default</servlet-name>\n    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>\n    <init-param>\n        <param-name>readonly</param-name>\n        <param-value>true</param-value>\n    </init-param>\n</servlet>\n```\n\nAnother option is to disable partial PUT (enabled by default):\n```\n<servlet>\n    <servlet-name>default</servlet-name>\n    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>\n    <init-param>\n        <param-name>allowPartialPut</param-name>\n        <param-value>false</param-value>\n    </init-param>\n</servlet>\n```\n\nA third option, useful only for mitigating the RCE case (so use this only if any of the conditions for data leakage are not met), is changing the configuration of the [Persistent Manager implementation](https://tomcat.apache.org/tomcat-9.0-doc/config/manager.html#:~:text=the%20sessionIdLength%20attribute.-,Persistent%20Manager%20Implementation,-If%20you%20are) to use a custom directory. This can be done through `context.xml`, by adding the `directory` attribute to the `Store` tag and specifying a custom directory:\n```\n<Manager className=\"org.apache.catalina.session.PersistentManager\" maxIdleBackup=\"1\" saveOnRestart=\"true\" processExpiresFrequency=\"1\">\n\t<Store className=\"org.apache.catalina.session.FileStore\" directory=\"...\"/>\n</Manager>\n```",
+            "ExtendedImpactReasons": [
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The issue can be exploited by attackers over the network",
+                  "Description": "This vulnerability can be exploited remotely by sending a malicious request to the server.",
+                  "IsPositive": 0,
+                  "InsertOrder": 1
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "Exploitation of the issue is only possible when the vulnerable component is used in a specific manner. The attacker has to perform per-target research to determine the vulnerable attack vector",
+                  "Description": "Exploitation of this vulnerability for data leakage requires the following prerequisites:\n1. Writes enabled for the default servlet (disabled by default).\n2. Support for partial PUT (enabled by default).\n3. A target URL for security-sensitive uploads that is a sub-directory of a target URL for public uploads.\n4. Attacker knowledge of the names of security-sensitive files being uploaded.\n5. The security-sensitive files are also being uploaded via partial PUT.\n\nExploitation for code execution requires the following:\n1. Writes enabled for the default servlet (disabled by default).\n2. Support for partial PUT (enabled by default).\n3. The application was using Tomcat's file-based session persistence with the default storage location.\n4. The application included a library that may be leveraged in a deserialization attack.",
+                  "IsPositive": 1,
+                  "InsertOrder": 2
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The issue has an exploit published",
+                  "Description": "The vulnerability has a published PoC.",
+                  "IsPositive": 0,
+                  "InsertOrder": 3
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The issue results in a severe impact (such as remote code execution)",
+                  "Description": "The impact of this vulnerability can be remote code execution or data leakage.",
+                  "IsPositive": 0,
+                  "InsertOrder": 4
+               }
+            ],
+            "ExtendedReferences": [
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Advisory",
+                  "Title": "Published GitHub Advisory",
+                  "Url": "https://github.com/advisories/GHSA-83qj-6fr2-vhqg",
+                  "InsertOrder": 1
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Exploit",
+                  "Title": "Published PoC",
+                  "Url": "https://scrapco.de/blog/analysis-of-cve-2025-24813-apache-tomcat-path-equivalence-rce.html",
+                  "InsertOrder": 2
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Patch",
+                  "Title": "Fix Commit",
+                  "Url": "https://github.com/apache/tomcat/commit/0a668e0c27f2b7ca0cc7c6eea32253b9b5ecb29c",
+                  "InsertOrder": 3
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Technical Writeup",
+                  "Title": "Technical Writeup",
+                  "Url": "https://scrapco.de/blog/analysis-of-cve-2025-24813-apache-tomcat-path-equivalence-rce.html",
+                  "InsertOrder": 4
+               }
+            ],
+            "ExtendedRelatedVulns": null
+         },
+         "component_physical_paths": [
+            "sha256__c9b7e37f97ad9fadc8888cb58cf4d7101ef4d9d3a9773c565c3d05684cfa3373.tar.gz/app/app.jar/META-INF/sbom/application.cdx.json/gav:/org.apache.tomcat.embed:tomcat-embed-core:10.1.34",
+            "sha256__c9b7e37f97ad9fadc8888cb58cf4d7101ef4d9d3a9773c565c3d05684cfa3373.tar.gz/app/app.jar/BOOT-INF/lib/tomcat-embed-core-10.1.34.jar"
+         ],
+         "is_cve_applicable": false,
+         "cve_applicability_info": {
+            "scanner_available": true,
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "gav://org.apache.tomcat.embed:tomcat-embed-core:10.1.34",
+            "cve_id": "CVE-2025-24813",
+            "scan_status": 1,
+            "applicability": false,
+            "evidence": null,
+            "info": "The Tomcat configuration is not vulnerable",
+            "details": null
+         },
+         "applicability_detail": {
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "gav://org.apache.tomcat.embed:tomcat-embed-core:10.1.34",
+            "vulnerability_id": "CVE-2025-24813",
+            "result": "not_applicable"
+         }
+      },
+      {
+         "id": "XRAY-675647",
+         "severity": "High",
+         "jfrog_severity": "Low",
+         "severity_source": "CVSS V3 from NVD",
+         "pkg_type": "alpine",
+         "summary": "A vulnerability, which was classified as problematic, was found in GNU Binutils up to 2.43. This affects the function disassemble_bytes of the file binutils/objdump.c. The manipulation of the argument buf leads to stack-based buffer overflow. It is possible to initiate the attack remotely. The complexity of an attack is rather high. The exploitability is told to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 2.44 is able to address this issue. The identifier of the patch is baac6c221e9d69335bf41366a1c7d87d8ab2f893. It is recommended to upgrade the affected component.",
+         "issue_type": "security",
+         "provider": "JFrog",
+         "component": "3.21:binutils",
+         "source_id": "alpine://3.21:binutils",
+         "source_comp_id": "alpine://3.21:binutils:2.43.1-r1",
+         "component_versions": {
+            "id": "3.21:binutils",
+            "vulnerable_versions": [
+               "< 2.43.1-r2"
+            ],
+            "fixed_versions": [
+               "2.43.1-r2"
+            ],
+            "more_details": {
+               "cves": [
+                  {
+                     "cve": "CVE-2025-0840",
+                     "cwe": [
+                        "CWE-121",
+                        "CWE-119"
+                     ],
+                     "cwe_details": {
+                        "CWE-119": {
+                           "name": "Improper Restriction of Operations within the Bounds of a Memory Buffer",
+                           "description": "The product performs operations on a memory buffer, but it can read from or write to a memory location that is outside of the intended boundary of the buffer.",
+                           "categories": [
+                              {
+                                 "category": "2023 CWE Top 25",
+                                 "rank": "17"
+                              }
+                           ]
+                        },
+                        "CWE-121": {
+                           "name": "Stack-based Buffer Overflow",
+                           "description": "A stack-based buffer overflow condition is a condition where the buffer being overwritten is allocated on the stack (i.e., is a local variable or, rarely, a parameter to a function)."
+                        }
+                     },
+                     "cvss_v3": "7.5/CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+                  }
+               ],
+               "description": "A vulnerability, which was classified as problematic, was found in GNU Binutils up to 2.43. This affects the function disassemble_bytes of the file binutils/objdump.c. The manipulation of the argument buf leads to stack-based buffer overflow. It is possible to initiate the attack remotely. The complexity of an attack is rather high. The exploitability is told to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 2.44 is able to address this issue. The identifier of the patch is baac6c221e9d69335bf41366a1c7d87d8ab2f893. It is recommended to upgrade the affected component.",
+               "provider": "JFrog"
+            }
+         },
+         "edited": "0001-01-01T00:00:00Z",
+         "is_source_root": false,
+         "is_high_profile": true,
+         "high_profile_info": {
+            "id": 0,
+            "PublicVulnsTblID": 0,
+            "VulnId": "XRAY-675647",
+            "VulnerabilityTitle": "",
+            "ShortDescription": "A stack buffer overflow in binutils leads to denial of service when disassembling a crafted ELF.",
+            "FullDescription": "",
+            "Impact": 4,
+            "VulnerabilityType": "Denial of service",
+            "Resolution": "",
+            "ExtendedImpactReasons": [
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The prerequisites for exploiting the issue are extremely unlikely",
+                  "Description": "Exploitation of this vulnerability requires the vulnerable application to use `objdump` on an attacker-supplied file, with the argument `--insn-width`  set to a number larger than 49.",
+                  "IsPositive": 1,
+                  "InsertOrder": 1
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The issue has an exploit published",
+                  "Description": "The vulnerability has a published PoC.",
+                  "IsPositive": 0,
+                  "InsertOrder": 2
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "Name": "The issue cannot result in a severe impact (such as remote code execution)",
+                  "Description": "Crashing a forked client process (ex. objdump or any other executable from binutils) has a negligible security impact.",
+                  "IsPositive": 1,
+                  "InsertOrder": 3
+               }
+            ],
+            "ExtendedReferences": [
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Advisory",
+                  "Title": "Published GitHub Advisory",
+                  "Url": "https://github.com/advisories/GHSA-c5qp-mx9f-m5c7",
+                  "InsertOrder": 1
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Exploit",
+                  "Title": "Published PoC",
+                  "Url": "https://sourceware.org/bugzilla/show_bug.cgi?id=32560",
+                  "InsertOrder": 2
+               },
+               {
+                  "id": 0,
+                  "PublicVulnsExtendedTblId": 0,
+                  "RefType": "Patch",
+                  "Title": "Fix Commit",
+                  "Url": "https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=baac6c221e9d69335bf41366a1c7d87d8ab2f893",
+                  "InsertOrder": 3
+               }
+            ],
+            "ExtendedRelatedVulns": null
+         },
+         "component_physical_paths": [
+            ""
+         ],
+         "is_cve_applicable": false,
+         "cve_applicability_info": {
+            "scanner_available": true,
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "alpine://3.21:binutils:2.43.1-r1",
+            "cve_id": "CVE-2025-0840",
+            "scan_status": 1,
+            "applicability": false,
+            "evidence": null,
+            "info": "Vulnerable use of objdump is not found since --insn-width is never used",
+            "details": null
+         },
+         "applicability_detail": {
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "alpine://3.21:binutils:2.43.1-r1",
+            "vulnerability_id": "CVE-2025-0840",
+            "result": "not_applicable"
+         }
+      },
+      {
+         "id": "XRAY-594241",
+         "severity": "Medium",
+         "severity_source": "CVSS V3 from NVD",
+         "pkg_type": "alpine",
+         "summary": "A heap overflow flaw was found in libpngs' pngimage.c program. This flaw allows an attacker with local network access to pass a specially crafted PNG file to the pngimage utility, causing an application to crash, leading to a denial of service.",
+         "issue_type": "security",
+         "provider": "JFrog",
+         "component": "3.21:libpng",
+         "source_id": "alpine://3.21:libpng",
+         "source_comp_id": "alpine://3.21:libpng:1.6.44-r0",
+         "component_versions": {
+            "id": "3.21:libpng",
+            "vulnerable_versions": [
+               "≤ 1.6.47-r0"
+            ],
+            "more_details": {
+               "cves": [
+                  {
+                     "cve": "CVE-2021-4214",
+                     "cwe": [
+                        "CWE-120"
+                     ],
+                     "cwe_details": {
+                        "CWE-120": {
+                           "name": "Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')",
+                           "description": "The product copies an input buffer to an output buffer without verifying that the size of the input buffer is less than the size of the output buffer, leading to a buffer overflow."
+                        }
+                     },
+                     "cvss_v3": "5.5/CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+                  }
+               ],
+               "description": "A heap overflow flaw was found in libpngs' pngimage.c program. This flaw allows an attacker with local network access to pass a specially crafted PNG file to the pngimage utility, causing an application to crash, leading to a denial of service.",
+               "provider": "JFrog"
+            }
+         },
+         "edited": "0001-01-01T00:00:00Z",
+         "is_source_root": false,
+         "is_high_profile": false,
+         "component_physical_paths": [
+            ""
+         ],
+         "applicability_detail": {
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "",
+            "vulnerability_id": "CVE-2021-4214",
+            "result": "not_covered"
+         }
+      },
+      {
+         "id": "XRAY-677249",
+         "severity": "Unknown",
+         "severity_source": "Unknown",
+         "pkg_type": "alpine",
+         "summary": "A stack overflow vulnerability exists in the libexpat library due to the way it handles recursive entity expansion in XML documents. When parsing an XML document with deeply nested entity references, libexpat can be forced to recurse indefinitely, exhausting the stack space and causing a crash. This issue could lead to denial of service (DoS) or, in some cases, exploitable memory corruption, depending on the environment and library usage.",
+         "issue_type": "security",
+         "provider": "JFrog",
+         "component": "3.21:libexpat",
+         "source_id": "alpine://3.21:libexpat",
+         "source_comp_id": "alpine://3.21:libexpat:2.6.4-r0",
+         "component_versions": {
+            "id": "3.21:libexpat",
+            "vulnerable_versions": [
+               "< 2.7.0-r0"
+            ],
+            "fixed_versions": [
+               "2.7.0-r0"
+            ],
+            "more_details": {
+               "cves": [
+                  {
+                     "cve": "CVE-2024-8176"
+                  }
+               ],
+               "description": "A stack overflow vulnerability exists in the libexpat library due to the way it handles recursive entity expansion in XML documents. When parsing an XML document with deeply nested entity references, libexpat can be forced to recurse indefinitely, exhausting the stack space and causing a crash. This issue could lead to denial of service (DoS) or, in some cases, exploitable memory corruption, depending on the environment and library usage.",
+               "provider": "JFrog"
+            }
+         },
+         "edited": "0001-01-01T00:00:00Z",
+         "is_source_root": false,
+         "is_high_profile": false,
+         "component_physical_paths": [
+            ""
+         ],
+         "applicability_detail": {
+            "component_id": "docker://spring-petclinic:latest",
+            "source_comp_id": "",
+            "vulnerability_id": "CVE-2024-8176",
+            "result": "not_covered"
+         }
+      }
+   ]
+}
