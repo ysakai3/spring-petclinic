@@ -1,4 +1,4 @@
-name: Build Spring PetClinic
+name: Build and Test Spring PetClinic
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build with Maven
-      run: ./mvnw clean install
+    - name: Compile the project
+      run: ./mvnw clean compile
+
+    - name: Run tests
+      run: ./mvnw test
 
